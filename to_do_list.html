@@ -7,9 +7,18 @@
 </head>
 <body>
 <div class="header" id="div_1">
-  <h2 style="margin:10px">TODO</h2>
-  <input type="text" id="task_input" placeholder="Task Name">
-  <span>Add Task</span>
+  <input type="button" id="group_add_button" value="Add Group" onclick="createGroup()" >
+  <!-- <ul id="Group_1" class="Group">
+    <li>
+      <input style="margin:10px type="text" id="group_input" placeholder="Group">
+    </li>
+    <li>
+      <input class="task_initializer" type="text" id="task_input"
+        placeholder="Instert Task Name Here"
+        onkeypress="enterKeyPressAddItem(event, 'task')" >
+      <input type="button" id="task_add_button" value="Add Task" onclick="createTask()" >
+    </li> -->
+  </ul>
 </div>
 </body>
 </html>
