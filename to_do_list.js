@@ -53,7 +53,16 @@ function createGroup() {
   task_initializer.className = "task_initializer";
   task_initializer.onkeypress = function() {enterKeyPressAddTask(event, group_id, task_initializer_id)};
 
+  let add_task_button = document.createElement("input");
+  let add_task_button_id = "add_task_button_" + task_initializer_index;
+  add_task_button.id = add_task_button_id;
+  add_task_button.type = "button";
+  add_task_button.value = "Add Task";
+  add_task_button.className = "add_task_button";
+  add_task_button.onclick = function() {createTask(group_id, task_initializer_id)};
+
   li.appendChild(task_initializer);
+  li.appendChild(add_task_button);
 
   ul.appendChild(li);
 
