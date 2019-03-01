@@ -9,7 +9,7 @@ class ToDoList {
   }
 
   createGroup() {
-    console.log('TEST this', this);
+    console.log('TEST "this" 1:', this);
 
     let drag_source;
 
@@ -18,12 +18,12 @@ class ToDoList {
     div_for_group.id = div_for_group_id;
     div_for_group.className = 'Div_For_Group';
 
-    let ul_group = document.createElement('ul');
+    let group_ul = document.createElement('ul');
     let group_name = "Group...";
-    let ul_group_id = 'ul_group_' + this.group_index;
-    ul_group.id = ul_group_id;
+    let group_ul_id = 'group_ul_' + this.group_index;
+    group_ul.id = group_ul_id;
     this.group_index++;
-    ul_group.className = 'ul_Group';
+    group_ul.className = 'Group_ul';
 
     let li = document.createElement("li");
 
@@ -37,11 +37,11 @@ class ToDoList {
     span_remove_group.className = "remove_group";
     span_remove_group.appendChild(text_remove_task);
     span_remove_group.onclick = function() {
-      remove_element(ul_group);
+      remove_element(group_ul);
     }
     li.appendChild(span_remove_group);
 
-    ul_group.appendChild(li);
+    group_ul.appendChild(li);
 
     li = document.createElement("li");
     let task_initializer = document.createElement("input");
@@ -57,12 +57,29 @@ class ToDoList {
     add_task_button.type = "button";
     add_task_button.value = "Add Task";
     add_task_button.className = "add_task_button";
+
+    let move_task_up_button = document.createElement("input");
+    let move_task_up_button_id = "move_task_up_button_" + this.task_initializer_index;
+    move_task_up_button.id = move_task_up_button_id;
+    move_task_up_button.type = "button";
+    move_task_up_button.value = "Move Up";
+    move_task_up_button.className = "move_task_up_button";
+
+    let move_task_down_button = document.createElement("input");
+    let move_task_down_button_id = "move_task_down_button_" + this.task_initializer_index;
+    move_task_down_button.id = move_task_down_button_id;
+    move_task_down_button.type = "button";
+    move_task_down_button.value = "Move down";
+    move_task_down_button.className = "move_task_down_button";
+
     this.task_initializer_index++;
 
     li.appendChild(task_initializer);
     li.appendChild(add_task_button);
-    ul_group.appendChild(li);
-    div_for_group.appendChild(ul_group);
+    group_ul.appendChild(li);
+    div_for_group.appendChild(move_task_up_button);
+    div_for_group.appendChild(group_ul);
+    div_for_group.appendChild(move_task_down_button);
 
     div_for_group.ondragover = function() {
       console.log('ondragover')
@@ -75,13 +92,34 @@ class ToDoList {
 
     document.getElementById("main_div").appendChild(div_for_group);
 
-    function createTask(ul_group_id, task_initializer_id, obj) {
+    move_task_down_button.onclick = function() {
+      let task_li_id = div_for_group.getElementsByClassName('Task_Li')[0].id;
+      let from_group_ul_id = group_ul_id;
+      let group_uls = document.getElementsByClassName('Group_ul');
+      let to_group_ul_id = group_uls[Array.prototype.indexOf.call(group_uls, group_ul) + 1].id;
 
-      console.log('ul_group_id, task_initializer_id:',
-                  ul_group_id, task_initializer_id);
+      let from_group = document.getElementById(from_group_ul_id);
+      let to_group = document.getElementById(to_group_ul_id);
+      let task = document.getElementById(task_li_id);
+      console.log('document: ', document);
+      console.log('from_group_ul_id: ', from_group_ul_id);
+      console.log('from_group: ', from_group);
+      console.log('to_group_ul_id: ', to_group_ul_id);
+      console.log('to_group: ', to_group);
+      console.log('task_li_id: ', task_li_id);
+      console.log('task: ', task);
+      moveTask(task_li_id, from_group_ul_id, to_group_ul_id );
+    }
+
+    function createTask(group_ul_id, task_initializer_id, obj) {
+
+      console.log('group_ul_id, task_initializer_id:',
+                  group_ul_id, task_initializer_id);
 
       let li = document.createElement("li");
-      li.id = 'task_li_' + obj.task_index;
+      let task_li_id = 'task_li_' + obj.task_index;
+      li.id = task_li_id
+      li.className = 'Task_Li'
       li.draggable="true";
 
       li.ondragstart = function() {
@@ -101,7 +139,7 @@ class ToDoList {
       }
 
       li.appendChild(task);
-      document.getElementById(ul_group_id).appendChild(li);
+      document.getElementById(group_ul_id).appendChild(li);
       document.getElementById(task_initializer_id).value = "";
 
       let span_remove_task = document.createElement("SPAN");
@@ -153,25 +191,36 @@ class ToDoList {
       e.stopPropagation();
       console.log('drag_source on dropped', drag_source);
       let data = e.dataTransfer.getData("text");
-      ul_group.appendChild(document.getElementById(data));
+      group_ul.appendChild(document.getElementById(data));
     }
     // --------------------------------------------------------------------------------
 
-    function enterKeyPressAddTask(event, ul_group_id, task_initializer_id, obj) {
+    function enterKeyPressAddTask(event, group_ul_id, task_initializer_id, obj) {
       const x = event.which || event.keyCode;
       if (x === 13) {
-        createTask(ul_group_id, task_initializer_id, obj);
+        createTask(group_ul_id, task_initializer_id, obj);
       }
     }
-    console.log('TEST this', this);
+    console.log('TEST "this" 2:', this);
 
     let obj = this;
     add_task_button.onclick = function() {
-      createTask(ul_group_id, task_initializer_id, obj)
+      createTask(group_ul_id, task_initializer_id, obj)
     };
     task_initializer.onkeypress = function() {
-      enterKeyPressAddTask(event, ul_group_id, task_initializer_id, obj)
+      enterKeyPressAddTask(event, group_ul_id, task_initializer_id, obj)
     };
+
+    function moveTask(task_li_id, from_group_ul_id, to_group_ul_id) {
+      let from_group = document.getElementById(from_group_ul_id);
+      let to_group = document.getElementById(to_group_ul_id);
+      let task = document.getElementById(task_li_id);
+      to_group.appendChild(task);
+      remove_element(from_group.getElementById(task_li_id));
+      // let list = document.getElementsByClassName('Div_For_Group');
+      // let list = document.getElementById("aaa")
+      // console.log('LIST', list)
+    }
   }
 }
 
