@@ -159,7 +159,7 @@ class ToDoList {
 
     function enterKeyPressAddTask(event, ul_group_id, task_initializer_id, obj) {
       const x = event.which || event.keyCode;
-      if (x == 13) {
+      if (x === 13) {
         createTask(ul_group_id, task_initializer_id, obj);
       }
     }
@@ -176,3 +176,6 @@ class ToDoList {
 }
 
 let toDOList = new ToDoList();
+function start(){
+  toDOList.createGroup();
+}
