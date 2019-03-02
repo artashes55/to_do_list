@@ -33,9 +33,9 @@ class ToDoList {
     li.appendChild(group_input_field);
 
     let span_remove_group = document.createElement("SPAN");
-    let text_remove_task = document.createTextNode("Remove Group");
+    let text_remove_group = document.createTextNode("Remove Group");
     span_remove_group.className = "remove_group";
-    span_remove_group.appendChild(text_remove_task);
+    span_remove_group.appendChild(text_remove_group);
     span_remove_group.onclick = function() {
       remove_element(group_ul);
     }
@@ -58,28 +58,29 @@ class ToDoList {
     add_task_button.value = "Add Task";
     add_task_button.className = "add_task_button";
 
-    let move_task_up_button = document.createElement("input");
-    let move_task_up_button_id = "move_task_up_button_" + this.task_initializer_index;
-    move_task_up_button.id = move_task_up_button_id;
-    move_task_up_button.type = "button";
-    move_task_up_button.value = "Move Up";
-    move_task_up_button.className = "move_task_up_button";
+    // let move_task_up_button = document.createElement("input");
+    // let move_task_up_button_id = "move_task_up_button_" + this.task_initializer_index;
+    // move_task_up_button.id = move_task_up_button_id;
+    // move_task_up_button.type = "button";
+    // move_task_up_button.value = "Move Task Up";
+    // move_task_up_button.className = "move_task_up_button";
 
     let move_task_down_button = document.createElement("input");
     let move_task_down_button_id = "move_task_down_button_" + this.task_initializer_index;
     move_task_down_button.id = move_task_down_button_id;
     move_task_down_button.type = "button";
-    move_task_down_button.value = "Move down";
+    move_task_down_button.value = "Move Task Down";
     move_task_down_button.className = "move_task_down_button";
 
     this.task_initializer_index++;
 
     li.appendChild(task_initializer);
     li.appendChild(add_task_button);
+    li.appendChild(move_task_down_button);
     group_ul.appendChild(li);
-    div_for_group.appendChild(move_task_up_button);
+    // div_for_group.appendChild(move_task_up_button);
     div_for_group.appendChild(group_ul);
-    div_for_group.appendChild(move_task_down_button);
+    // div_for_group.appendChild(move_task_down_button);
 
     div_for_group.ondragover = function() {
       console.log('ondragover')
@@ -133,7 +134,7 @@ class ToDoList {
       let task = document.createElement("input");
       task.id = 'task_' + obj.task_index
       // task.value = task_name
-      task.placeholder = '...';
+      task.placeholder = 'Task' + obj.task_index;
       if (task_name) {
         task.value = task_name;
       }
