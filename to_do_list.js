@@ -37,7 +37,7 @@ class ToDoList {
     span_remove_group.className = "remove_group";
     span_remove_group.appendChild(text_remove_group);
     span_remove_group.onclick = function() {
-      remove_element(group_ul);
+      remove_element(div_for_group);
     }
     li.appendChild(span_remove_group);
 
@@ -62,15 +62,16 @@ class ToDoList {
     // let move_task_up_button_id = "move_task_up_button_" + this.task_initializer_index;
     // move_task_up_button.id = move_task_up_button_id;
     // move_task_up_button.type = "button";
-    // move_task_up_button.value = "Move Task Up";
+    // move_task_up_button.value = "Move Task To Previous Group";
     // move_task_up_button.className = "move_task_up_button";
 
     let move_task_down_button = document.createElement("input");
     let move_task_down_button_id = "move_task_down_button_" + this.task_initializer_index;
     move_task_down_button.id = move_task_down_button_id;
     move_task_down_button.type = "button";
-    move_task_down_button.value = "Move Task Down";
+    move_task_down_button.value = "Move Task To Next Group";
     move_task_down_button.className = "move_task_down_button";
+    move_task_down_button.style.visibility = "hidden";
 
     this.task_initializer_index++;
 
@@ -92,6 +93,14 @@ class ToDoList {
     };
 
     document.getElementById("main_div").appendChild(div_for_group);
+
+    function changeMoveTaskButtonVisibility(button) {
+      if (div_for_group.getElementsByClassName('Task_Li').length > 0) {
+        button.style.visibility = "visible";
+      } else {
+        button.style.visibility = "hidden";
+      }
+    }
 
     move_task_down_button.onclick = function() {
       let task_li_id = div_for_group.getElementsByClassName('Task_Li')[0].id;
@@ -148,29 +157,24 @@ class ToDoList {
       span_remove_task.className = "remove_task";
       span_remove_task.appendChild(text_remove_task);
       span_remove_task.onclick = function() {
-        // in this context 'this' is span_remove_task
-        remove_element(this);
+        remove_element(li);
       }
       li.appendChild(span_remove_task);
+
+      changeMoveTaskButtonVisibility(move_task_down_button);
 
       obj.task_index++;
     }
 
     function remove_element(element) {
-
-      // does not remove, but hides
-      // let parent = element.parentElement;
-      // parent.style.display = "none";
-
-      // ---- two code snippets below do the same thing (parentElement/parentNode) ---
+      // ---- two lines of code snippets below do the same thing (parentElement/parentNode) ---
 
       let parent = element.parentElement;
-      parent.parentElement.removeChild(parent);
-
       // let parent = element.parentNode;
-      // parent.parentNode.removeChild(parent);
 
       // ----------------------------------------------------------------------------
+      parent.removeChild(element);
+      changeMoveTaskButtonVisibility(move_task_down_button);
     }
 
     // -------------------------- drag and drop ---------------------------------------

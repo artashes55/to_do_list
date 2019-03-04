@@ -1,7 +1,13 @@
-/*ul
-{
-    display: inline-block;
-    list-style: none;
-    white-space: nowrap;
-    overflow: auto;
-}*/
+#main_div {
+    background-color: #F5F5DC;
+    padding: 20px
+}
+
+.Task_Li input {
+    background-color: #F5F5DC;
+    /*color: #000;*/
+}
+
+.remove_task {
+    background-color: #F5F5DC;
+}
