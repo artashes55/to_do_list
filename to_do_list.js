@@ -23,6 +23,11 @@ class ToDoList {
     this.group_index++;
     group_ul.className = 'Group_ul';
 
+    $( function() {
+      $( group_ul_id ).sortable();
+      $( group_ul_id ).disableSelection();
+    } );
+
     let li = document.createElement("li");
 
     let group_input_field = document.createElement("input");
@@ -106,6 +111,8 @@ class ToDoList {
     }
 
     function createTask(group_ul_id, task_initializer_id, obj, name='') {
+
+                  group_ul_id, task_initializer_id);
 
       let li = document.createElement("li");
       let task_li_id = 'task_li_' + obj.task_index;
