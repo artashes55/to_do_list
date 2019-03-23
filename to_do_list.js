@@ -23,11 +23,6 @@ class ToDoList {
     this.group_index++;
     group_ul.className = 'Group_ul';
 
-    $( function() {
-      $( ".Group_ul" ).sortable();
-      $( ".Group_ul" ).disableSelection();
-    } );
-
     let li = document.createElement("li");
 
     let group_input_field = document.createElement("input");
@@ -43,8 +38,9 @@ class ToDoList {
     let text_remove_group = document.createTextNode("Remove Group");
     span_remove_group.className = "remove_group";
     span_remove_group.appendChild(text_remove_group);
+    let obj = this;
     span_remove_group.onclick = function() {
-      remove_element(div_for_group);
+      obj.remove_element(div_for_group);
     }
     li.appendChild(span_remove_group);
 
@@ -65,13 +61,14 @@ class ToDoList {
     add_task_button.value = "Add Task";
     add_task_button.className = "add_task_button";
 
+
     let move_task_down_button = document.createElement("input");
     let move_task_down_button_id = "move_task_down_button_" + this.task_initializer_index;
     move_task_down_button.id = move_task_down_button_id;
     move_task_down_button.type = "button";
     move_task_down_button.value = "Move Task To Next Group";
     move_task_down_button.className = "move_task_down_button";
-    move_task_down_button.style.visibility = "hidden";
+    // move_task_down_button.style.visibility = "hidden";
 
     this.task_initializer_index++;
 
@@ -81,12 +78,12 @@ class ToDoList {
     group_ul.appendChild(li);
     div_for_group.appendChild(group_ul);
 
-    div_for_group.ondragover = function() {
-      draggingOver(event);
-    };
-    div_for_group.ondrop = function() {
-      dropped(event);
-    };
+    // div_for_group.ondragover = function() {
+    //   draggingOver(event);
+    // };
+    // div_for_group.ondrop = function() {
+    //   dropped(event);
+    // };
 
     document.getElementById("main_div").appendChild(div_for_group);
 
@@ -120,7 +117,6 @@ class ToDoList {
       group_ul.appendChild(document.getElementById(data));
     }
 
-    let obj = this;
     function enterKeyPressAddTask(event, group_ul_id, task_initializer_id, obj) {
       const x = event.which || event.keyCode;
       if (x === 13) {
@@ -146,7 +142,7 @@ class ToDoList {
       let to_group = document.getElementById(to_group_ul_id);
       let task = document.getElementById(task_li_id);
       to_group.appendChild(task);
-      remove_element(from_group.getElementById(task_li_id));
+      obj.remove_element(from_group.getElementById(task_li_id));
     }
   }
 
@@ -158,9 +154,9 @@ class ToDoList {
     li.className = 'Task_Li'
     li.draggable="true";
 
-    li.ondragstart = function() {
-      dragStarted(event);
-    };
+    // li.ondragstart = function() {
+    //   dragStarted(event);
+    // };
 
     let task_name;
     if (name) {
@@ -191,7 +187,7 @@ class ToDoList {
     li.appendChild(span_remove_task);
 
     let move_task_down_button = li.parentElement.getElementsByClassName('move_task_down_button')[0];
-    obj.changeMoveTaskButtonVisibility(move_task_down_button);
+    // obj.changeMoveTaskButtonVisibility(move_task_down_button);
 
     obj.task_index++;
   }
@@ -204,7 +200,7 @@ class ToDoList {
     if (element.className === 'Task_Li') {
       const move_task_down_button = element.parentElement.getElementsByClassName('move_task_down_button')[0];
       parent.removeChild(element);
-      this.changeMoveTaskButtonVisibility(move_task_down_button);
+      // this.changeMoveTaskButtonVisibility(move_task_down_button);
     } else {
       parent.removeChild(element);
     }
@@ -284,4 +280,5 @@ function wrapdownloadJsonFile(){
 
 function wrapCreateGroup(){
   toDOList.createGroup();
+  $(".Group_ul").sortable();
 }
