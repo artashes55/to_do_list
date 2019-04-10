@@ -1,9 +1,15 @@
-#main_div {
-  background-color: #F5F5DC;
-  padding: 20px
+body {
+  background-color: #4ac06b;
 }
 
-.Task_Li input {
+#main_div {
+  /*background-color: #F5F5DC;*/
+  /*padding: 20px*/
+  overflow:scroll;
+  white-space: nowrap;
+}
+
+.task_li input {
   background-color: #F5F5DC;
   /*color: #000;*/
 }
@@ -12,6 +18,7 @@
   border-style: solid;
   border-width: 2px;
   background-color: #FF1493;
+  vertical-align: top;
 }
 
 .remove_group {
@@ -20,8 +27,41 @@
   background-color: #FF1493;
 }
 
-.Group_ul {
+.group_ul {
   border-style: solid;
   border-width: 5px;
-  background-color: #ADD8E6;
+  background-color: #dfe3e6;
+  /*width: 350px;*/
+  list-style: none;
+}
+
+.task_input {
+  overflow: hidden;
+  overflow-wrap: break-word;
+  height: 80px;
+  width: 200px;
+  resize: none;
+  overflow-y: scroll;
+}
+
+.task_initializer, .group_input {
+  width: 200px;
+}
+
+.div_for_group {
+  width: 500px;
+  overflow-y: hidden;
+  display: inline-block;
+  *display: inline;
+  vertical-align: top;
+  /*font-size: 12px;*/
+}
+
+.tasks_ul {
+  list-style: none;
+  min-height: 30px;
+}
+
+.task_li {
+  margin-left: -40px;
 }

@@ -14,14 +14,13 @@ class ToDoList {
     let div_for_group = document.createElement('div');
     let div_for_group_id = 'div_for_group_' + this.group_index;
     div_for_group.id = div_for_group_id;
-    div_for_group.className = 'Div_For_Group';
+    div_for_group.className = 'div_for_group';
 
     let group_ul = document.createElement('ul');
     let group_placeholder = "Group...";
     let group_ul_id = 'group_ul_' + this.group_index;
     group_ul.id = group_ul_id;
-    this.group_index++;
-    group_ul.className = 'Group_ul';
+    group_ul.className = 'group_ul';
 
     let li = document.createElement("li");
 
@@ -61,43 +60,22 @@ class ToDoList {
     add_task_button.value = "Add Task";
     add_task_button.className = "add_task_button";
 
-
-    let move_task_down_button = document.createElement("input");
-    let move_task_down_button_id = "move_task_down_button_" + this.task_initializer_index;
-    move_task_down_button.id = move_task_down_button_id;
-    move_task_down_button.type = "button";
-    move_task_down_button.value = "Move Task To Next Group";
-    move_task_down_button.className = "move_task_down_button";
-    // move_task_down_button.style.visibility = "hidden";
-
     this.task_initializer_index++;
 
     li.appendChild(task_initializer);
     li.appendChild(add_task_button);
-    li.appendChild(move_task_down_button);
     group_ul.appendChild(li);
+
+    let tasks_ul = document.createElement('ul');
+    let tasks_ul_id = 'tasks_ul_' + this.group_index;
+    tasks_ul.id = tasks_ul_id;
+    tasks_ul.className = 'tasks_ul';
+    group_ul.appendChild(tasks_ul);
+
+    this.group_index++;
+
     div_for_group.appendChild(group_ul);
-
-    // div_for_group.ondragover = function() {
-    //   draggingOver(event);
-    // };
-    // div_for_group.ondrop = function() {
-    //   dropped(event);
-    // };
-
     document.getElementById("main_div").appendChild(div_for_group);
-
-    move_task_down_button.onclick = function() {
-      let task_li_id = div_for_group.getElementsByClassName('Task_Li')[0].id;
-      let from_group_ul_id = group_ul_id;
-      let group_uls = document.getElementsByClassName('Group_ul');
-      let to_group_ul_id = group_uls[Array.prototype.indexOf.call(group_uls, group_ul) + 1].id;
-
-      let from_group = document.getElementById(from_group_ul_id);
-      let to_group = document.getElementById(to_group_ul_id);
-      let task = document.getElementById(task_li_id);
-      moveTask(task_li_id, from_group_ul_id, to_group_ul_id );
-    }
 
     function dragStarted(e) {
       drag_source = e.target;
@@ -141,22 +119,20 @@ class ToDoList {
       let from_group = document.getElementById(from_group_ul_id);
       let to_group = document.getElementById(to_group_ul_id);
       let task = document.getElementById(task_li_id);
-      to_group.appendChild(task);
+      to_group.getElementsByClassName('tasks_ul')[0].appendChild(task);
       obj.remove_element(from_group.getElementById(task_li_id));
     }
   }
 
   createTask(group_ul_id, task_initializer_id, obj, name='') {
 
+
     let li = document.createElement("li");
     let task_li_id = 'task_li_' + obj.task_index;
     li.id = task_li_id
-    li.className = 'Task_Li'
+    li.className = 'task_li'
     li.draggable="true";
 
-    // li.ondragstart = function() {
-    //   dragStarted(event);
-    // };
 
     let task_name;
     if (name) {
@@ -165,7 +141,7 @@ class ToDoList {
       task_name = document.getElementById(task_initializer_id).value;
     }
 
-    let task_input = document.createElement("input");
+    let task_input = document.createElement("textarea");
     task_input.id = 'task_' + obj.task_index
     task_input.className = 'task_input';
     task_input.placeholder = 'Task' + obj.task_index;
@@ -174,7 +150,7 @@ class ToDoList {
     }
 
     li.appendChild(task_input);
-    document.getElementById(group_ul_id).appendChild(li);
+    document.getElementById(group_ul_id).getElementsByClassName('tasks_ul')[0].appendChild(li);
     document.getElementById(task_initializer_id).value = "";
 
     let span_remove_task = document.createElement("SPAN");
@@ -185,34 +161,15 @@ class ToDoList {
       obj.remove_element(li);
     }
     li.appendChild(span_remove_task);
-
-    let move_task_down_button = li.parentElement.getElementsByClassName('move_task_down_button')[0];
-    // obj.changeMoveTaskButtonVisibility(move_task_down_button);
-
     obj.task_index++;
   }
 
   remove_element(element) {
-
     let parent = element.parentElement;
-
-
-    if (element.className === 'Task_Li') {
-      const move_task_down_button = element.parentElement.getElementsByClassName('move_task_down_button')[0];
+    if (element.className === 'task_li') {
       parent.removeChild(element);
-      // this.changeMoveTaskButtonVisibility(move_task_down_button);
     } else {
       parent.removeChild(element);
-    }
-  }
-
-  changeMoveTaskButtonVisibility(button_move_task) {
-
-    const div_for_group = button_move_task.parentElement.parentElement.parentElement;
-    if (div_for_group.getElementsByClassName('Task_Li').length > 0) {
-      button_move_task.style.visibility = "visible";
-    } else {
-      button_move_task.style.visibility = "hidden";
     }
   }
 
@@ -233,10 +190,11 @@ class ToDoList {
           let contents = e.target.result;
           json_obj = JSON.parse(contents);
           let i;
-          let json_gruops = json_obj['groups'];
-          for (i in json_gruops) {
-            let json_group = json_gruops[i];
+          let json_groups = json_obj['groups'];
+          for (i in json_groups) {
+            let json_group = json_groups[i];
             obj.createGroup(json_group);
+            tasks_sortable();
           }
         }
         r.readAsText(f);
@@ -249,7 +207,7 @@ class ToDoList {
 
   downloadJsonFile(filename) {
     let json_obj = {"groups": []};
-    let groups = document.getElementById("main_div").getElementsByClassName("Group_ul");
+    let groups = document.getElementById("main_div").getElementsByClassName("group_ul");
 
     for (let i = 0; i < groups.length; i++) {
       let group = groups[i];
@@ -280,5 +238,13 @@ function wrapdownloadJsonFile(){
 
 function wrapCreateGroup(){
   toDOList.createGroup();
-  $(".Group_ul").sortable();
+  tasks_sortable();
+}
+
+function tasks_sortable() {
+  $(".tasks_ul").sortable({
+    connectWith: ".tasks_ul",
+    receive: function(event, ui) {
+    }
+  }).disableSelection();
 }
