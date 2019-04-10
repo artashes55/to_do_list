@@ -33,6 +33,8 @@ body {
   background-color: #dfe3e6;
   /*width: 350px;*/
   list-style: none;
+  max-height: 800px;
+  overflow: auto;
 }
 
 .task_input {
